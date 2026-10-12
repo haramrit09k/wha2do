@@ -14,7 +14,7 @@ Create lists, add tasks with a start time, tick them off, and watch your progres
 
 [![wha2do demo](docs/demo/wha2do-demo.gif)](docs/demo/wha2do-demo.mp4)
 
-A 45-second walkthrough: sign up, create a list, add tasks, tick them off. Click it for the full 1080p video
+A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up, create a list, add tasks, tick them off. Click it for the full 1080p video
 ([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)). It is recorded from the browser preview, see below.
 
 ## Features

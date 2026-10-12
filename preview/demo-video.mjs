@@ -58,11 +58,56 @@ const caption = async msg => {
   await page.evaluate(m => {
     const el = document.getElementById('cap');
     el.textContent = m;
-    el.style.opacity = m ? '1' : '0';
+    el.classList.toggle('on', Boolean(m));
   }, msg);
 };
 
-const tap = async locator => {
+const card = (id, on) =>
+  page.evaluate(
+    ([i, v]) => document.getElementById(i).classList.toggle('on', v),
+    [id, on],
+  );
+
+// Virtual camera: look at world point (x, y) at a zoom level, optionally tilted in 3D.
+// The phone's screen origin in world space is (757, 110); the stage is 1920x1080.
+const SCREEN = {x: 757, y: 110};
+let cam = {x: 960, y: 540, s: 1, rx: 0, ry: 0};
+const camera = async (next, ms = 1100, ease = 'cubic-bezier(.45,0,.2,1)') => {
+  cam = {...cam, ...next};
+  await page.evaluate(
+    ({c, ms, ease}) => {
+      const w = document.getElementById('world');
+      w.style.transition = `transform ${ms}ms ${ease}`;
+      const ox = c.s > 1.15 ? 250 : 0;
+      w.style.transform = `translate(${960 + ox}px,540px) rotateX(${
+        c.rx
+      }deg) rotateY(${c.ry}deg) scale(${c.s}) translate(${-c.x}px,${-c.y}px)`;
+    },
+    {c: cam, ms, ease},
+  );
+  await pause(ms);
+};
+
+// Zoom on an element inside the app. dx/dy nudge the focus (in screen px).
+const focus = async (locator, s = 2.2, ms = 700, dx = 0, dy = 0) => {
+  const pos = await locator.evaluate(el => {
+    const r = el.getBoundingClientRect();
+    return {x: r.x + r.width / 2, y: r.y + r.height / 2};
+  });
+  await camera(
+    {x: SCREEN.x + pos.x + dx, y: SCREEN.y + pos.y + dy, s, rx: 0, ry: 0},
+    ms,
+  );
+};
+
+const wide = (ms = 1100) => camera({x: 960, y: 540, s: 1, rx: 0, ry: 0}, ms);
+const medium = (ms = 800) =>
+  camera({x: 960, y: 560, s: 1.28, rx: 0, ry: 0}, ms);
+
+const tap = async (locator, zoom) => {
+  if (zoom) {
+    await focus(locator, zoom, 650);
+  }
   const pos = await locator.evaluate(el => {
     const r = el.getBoundingClientRect();
     return {x: r.x + r.width / 2, y: r.y + r.height / 2};
@@ -72,7 +117,7 @@ const tap = async locator => {
       'demo-finger',
     ).style.transform = `translate(${x}px,${y}px)`;
   }, pos);
-  await pause(450);
+  await pause(330);
   await locator.evaluate(el => {
     const f = el.ownerDocument.getElementById('demo-finger');
     f.classList.remove('press');
@@ -81,12 +126,12 @@ const tap = async locator => {
   });
   await pause(120);
   await locator.click();
-  await pause(250);
+  await pause(150);
 };
 
-const type = async (locator, value) => {
-  await tap(locator);
-  await locator.pressSequentially(value, {delay: 40});
+const type = async (locator, value, zoom) => {
+  await tap(locator, zoom);
+  await locator.pressSequentially(value, {delay: 28});
   await pause(250);
 };
 
@@ -94,64 +139,88 @@ await page.goto(url);
 await text('Log in').waitFor();
 await installOverlay();
 
-// 1. Welcome
-await caption('wha2do: your lists, your day, one place');
-await pause(1300);
+// --- Intro: tilted, zoomed-out title shot that swings round to the flat phone.
+cam = {x: 960, y: 540, s: 0.6, rx: 12, ry: -26};
+await camera({}, 0);
+await card('intro', true);
+await pause(1200);
+await card('intro', false);
+await camera(
+  {x: 960, y: 540, s: 1, rx: 0, ry: 0},
+  2000,
+  'cubic-bezier(.3,0,.15,1)',
+);
+await caption('Your lists, your day, one place');
+await camera({x: 960, y: 520, s: 1.35}, 1800, 'cubic-bezier(.2,.4,.4,1)');
 
-// 2. Sign up
-await caption('Create an account');
-await tap(text('Create an account'));
-await type(field('Username'), 'Alex');
-await type(field('Email address'), 'alex@example.com');
-await type(field('Phone (10 digits)'), '5551234567');
-await type(field('Password (8+ characters)'), 'password123');
+// --- Sign up
+await caption('Create an account in seconds');
+await tap(text('Create an account'), 2);
+await medium();
+await type(field('Username'), 'Alex', 2.4);
+await type(field('Email address'), 'alex@example.com', 2.4);
+await type(field('Phone (10 digits)'), '5551234567', 2.4);
+await type(field('Password (8+ characters)'), 'password123', 2.4);
 await caption('Forms are validated as you type');
-await pause(900);
-await tap(app.getByRole('button', {name: 'Sign up'}));
+await medium(900);
+await tap(app.getByRole('button', {name: 'Sign up'}), 2);
 
-// 3. First list
+// --- First list
 await text('No lists yet').waitFor();
+await medium();
 await caption('Start with a list for anything');
-await pause(1100);
-await tap(app.getByLabel('New list'));
+await pause(900);
+await tap(app.getByLabel('New list'), 2.2);
+await camera({x: SCREEN.x + 203, y: SCREEN.y + 640, s: 1.8}, 800);
 await type(field('List name (e.g. Groceries)'), 'Groceries');
-await tap(text('Create list'));
+await tap(text('Create list'), 2);
 await text('Groceries').waitFor();
 await caption('Icons are matched to your list automatically');
-await pause(1300);
+await focus(text('Groceries'), 2.3, 1100);
+await pause(1100);
 
-// 4. Tasks
+// --- Tasks
 await tap(text('Groceries'));
 await text('Nothing to do').waitFor();
+await medium();
 for (const [i, name] of [
   'Oat milk',
   'Sourdough bread',
   'Fresh basil',
 ].entries()) {
-  await caption(i === 0 ? 'Add tasks with an optional start time' : '');
-  await tap(app.getByLabel('New task'));
+  await caption(i === 0 ? 'Add tasks, with an optional start time' : '');
+  await tap(app.getByLabel('New task'), 2);
+  await camera({x: SCREEN.x + 203, y: SCREEN.y + 640, s: 1.8}, 800);
   await type(field('What needs doing?'), name);
   if (i === 0) {
-    await tap(text('Pick a start time (optional)'));
-    await pause(500);
+    await tap(text('Pick a start time (optional)'), 2.2);
+    await pause(700);
   }
-  await tap(text('Add task'));
-  await pause(500);
+  await tap(text('Add task'), 2);
+  await pause(400);
 }
 
-// 5. Complete tasks
+// --- Complete tasks, then look at the progress
+await medium();
 await caption('Tap the circle to tick tasks off');
-await pause(800);
-await tap(app.getByRole('checkbox').first());
 await pause(600);
-await tap(app.getByRole('checkbox').first());
+await tap(app.getByRole('checkbox').first(), 2.8);
+await pause(500);
+await tap(app.getByRole('checkbox').first(), 2.8);
 await caption('Progress updates as you go');
-await pause(1800);
+await focus(text('2 of 3 done'), 2.1, 1100, 100, 150);
+await pause(1400);
 
-// 6. Back to lists, end card
-await tap(app.getByLabel('Back'));
-await caption('wha2do: built with React Native + Firebase');
-await pause(2200);
+// --- Back to the lists, then pull away for the end card
+await tap(app.getByLabel('Back'), 2);
+await caption('');
+await camera(
+  {x: 960, y: 540, s: 0.62, rx: 10, ry: 24},
+  2400,
+  'cubic-bezier(.4,0,.2,1)',
+);
+await card('outro', true);
+await pause(2400);
 
 await context.close();
 const video = fs.readdirSync(tmp).find(f => f.endsWith('.webm'));
@@ -185,7 +254,7 @@ execFileSync('ffmpeg', [
   '-i',
   src,
   '-vf',
-  'fps=10,scale=640:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=96[p];[b][p]paletteuse=dither=bayer:bayer_scale=4',
+  'fps=8,scale=560:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=48:stats_mode=diff[p];[b][p]paletteuse=dither=none:diff_mode=rectangle',
   gif,
 ]);
 fs.rmSync(tmp, {recursive: true, force: true});
