@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "shots": "node screenshots.mjs"
+    "shots": "node screenshots.mjs",
+    "video": "node demo-video.mjs"
   },
   "dependencies": {
     "react": "16.13.1",

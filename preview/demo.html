@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>wha2do demo stage</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; background: #2b3bd6; }
+      body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #fff; }
+
+      /* The "camera" looks at #world (1920x1080 design space). demo-video.mjs sets #world's transform. */
+      #stage { position: fixed; inset: 0; overflow: hidden; perspective: 2200px; perspective-origin: 50% 50%; }
+      #world { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; transform-style: preserve-3d; }
+      #bg { position: absolute; inset: -3000px; background: linear-gradient(135deg, #2b3bd6 0%, #4154fe 45%, #8a99ff 100%); }
+      .blob { position: absolute; border-radius: 50%; opacity: .22; background: #fff; }
+      #wordmark { position: absolute; left: 0; right: 0; top: 330px; text-align: center; font-size: 360px; font-weight: 900; font-style: italic;
+        letter-spacing: -14px; color: rgba(255,255,255,.07); white-space: nowrap; }
+
+      /* phone: 430x884 centred in the world, screen is 406x860 */
+      #phone { position: absolute; left: 745px; top: 98px; width: 430px; height: 884px; padding: 12px; box-sizing: border-box;
+        border-radius: 64px; background: #14183c; box-shadow: 0 50px 110px rgba(10, 14, 60, .55), inset 0 0 0 2px #2a2f63; }
+      #screen { width: 100%; height: 100%; border: 0; border-radius: 52px; background: #f4f7ff; display: block; }
+
+      /* fixed overlays (not affected by the camera) */
+      #cap { position: fixed; left: 110px; top: 50%; width: 560px; transform: translateY(calc(-50% + 12px)); font-size: 64px; line-height: 1.12;
+        font-weight: 900; letter-spacing: -2px; text-shadow: 0 4px 30px rgba(10, 14, 60, .35); opacity: 0; }
+      #cap::before { content: 'wha2do'; display: block; margin-bottom: 18px; font-size: 28px; font-style: italic; font-weight: 800; letter-spacing: -.5px; opacity: .75; }
+      .card { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+        opacity: 0; pointer-events: none; }
+      .card h1 { margin: 0; font-size: 150px; font-weight: 900; font-style: italic; letter-spacing: -5px; }
+      .card p { margin: 14px 0 0; font-size: 40px; font-weight: 600; opacity: .9; }
+      #intro { background: linear-gradient(135deg, #2b3bd6 0%, #4154fe 45%, #8a99ff 100%); }
+      #outro { background: rgba(35, 48, 190, .93); backdrop-filter: blur(14px); }
+      #outro small { margin-top: 30px; font-size: 28px; opacity: .75; letter-spacing: .5px; }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div id="world">
+        <div id="bg"></div>
+        <div class="blob" style="left:-120px;top:-100px;width:520px;height:520px"></div>
+        <div class="blob" style="left:1500px;top:640px;width:700px;height:700px;opacity:.14"></div>
+        <div class="blob" style="left:1380px;top:-160px;width:340px;height:340px;opacity:.12"></div>
+        <div id="wordmark">wha2do</div>
+        <div id="phone"><iframe id="screen" src="/" title="wha2do"></iframe></div>
+      </div>
+    </div>
+    <div id="cap"></div>
+    <div id="intro" class="card on"><h1>wha2do</h1><p>Your lists. Your day. One place.</p></div>
+    <div id="outro" class="card"><h1>wha2do</h1><p>Built with React Native + Firebase</p><small>github.com/haramrit09k/wha2do</small></div>
+  </body>
+</html>
