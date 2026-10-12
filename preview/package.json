@@ -1,0 +1,19 @@
+{
+  "name": "wha2do-preview",
+  "private": true,
+  "description": "Runs the real wha2do screens in a browser (react-native-web + in-memory Firebase) for demos and screenshots.",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "shots": "node screenshots.mjs"
+  },
+  "dependencies": {
+    "react": "16.13.1",
+    "react-dom": "16.13.1",
+    "react-native-web": "0.13.18"
+  },
+  "devDependencies": {
+    "playwright": "1.56.1",
+    "vite": "5.4.11"
+  }
+}
