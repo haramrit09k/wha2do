@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "preview": "cd preview && npm install && npm run dev",
-    "preview:shots": "cd preview && npm install && npm run shots"
+    "preview:shots": "cd preview && npm install && npm run shots",
+    "preview:video": "cd preview && npm install && npm run video"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^2.3.2",

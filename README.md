@@ -10,6 +10,13 @@ Create lists, add tasks with a start time, tick them off, and watch your progres
 
 </div>
 
+## Demo
+
+[![wha2do demo](docs/demo/wha2do-demo.gif)](docs/demo/wha2do-demo.mp4)
+
+A 45-second walkthrough: sign up, create a list, add tasks, tick them off. Click it for the full 1080p video
+([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)). It is recorded from the browser preview, see below.
+
 ## Features
 
 - **Accounts** with email and password (Firebase Auth): sign up with validation, log in, stay signed in, reset a forgotten password by email.
@@ -64,6 +71,20 @@ npm run android      # with an emulator running or a device attached
 npm start            # Metro bundler, if it is not already running
 ```
 
+### On a Mac
+
+- **Quickest:** use the [browser preview](#browser-preview). It needs only Node and a browser, no Android tooling.
+- **Android emulator:**
+  1. Install [Android Studio](https://developer.android.com/studio), then in the SDK Manager add an Android SDK platform and an emulator image. On Apple Silicon choose an **ARM64** image.
+  2. Install JDK 11 (for example `brew install --cask zulu@11`). The Gradle wrapper (5.5) in this project does not run on newer JDKs.
+  3. Add the SDK to your shell profile: `export ANDROID_HOME=$HOME/Library/Android/sdk` and add `$ANDROID_HOME/platform-tools` to `PATH`.
+  4. Create and start a virtual device in Android Studio's Device Manager, then run `npm install --legacy-peer-deps && npm run android`.
+- **Real phone:** enable USB debugging, plug it in, check `adb devices` lists it, then `npm run android`.
+- **iOS:** the `ios/` folder is the untouched 2020 template and has not been maintained, so expect to fix it before it builds.
+
+Because this is React Native 0.62 with the Android Gradle plugin 3.4, newer Mac setups (Apple Silicon, recent Xcode or JDK) can hit
+build errors. If so, upgrading React Native is the real fix, see [next steps](#known-limitations-and-next-steps).
+
 ### Firebase
 
 The app talks to the Firebase project configured in [`src/firebase.js`](src/firebase.js). To use your
@@ -90,6 +111,7 @@ no Firebase project, emulator or Android SDK, which makes it handy for demos and
 ```bash
 npm run preview         # dev server, open the printed URL in a phone-sized window
 npm run preview:shots   # regenerates docs/screenshots/*.png with Playwright
+npm run preview:video   # re-records docs/demo/wha2do-demo.mp4 and .gif (needs ffmpeg)
 ```
 
 Log in with `demo@wha2do.app` / `password123`, or create a new account.

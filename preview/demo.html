@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>wha2do demo stage</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; }
+      body {
+        display: flex; align-items: center; justify-content: center; gap: 120px;
+        background: linear-gradient(135deg, #3548f0 0%, #4154fe 45%, #7b8cff 100%);
+        font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #fff;
+      }
+      #copy { width: 640px; }
+      #eyebrow { font-size: 30px; font-weight: 800; font-style: italic; letter-spacing: -0.5px; opacity: .85; }
+      #cap { margin-top: 18px; font-size: 64px; line-height: 1.1; font-weight: 800; letter-spacing: -1.5px; min-height: 150px; transition: opacity .3s; }
+      #phone { width: 430px; height: 884px; padding: 12px; box-sizing: border-box; border-radius: 64px; background: #14183c;
+        box-shadow: 0 40px 90px rgba(10, 14, 60, .5); }
+      #screen { width: 100%; height: 100%; border: 0; border-radius: 52px; background: #f4f7ff; display: block; }
+    </style>
+  </head>
+  <body>
+    <div id="copy"><div id="eyebrow">wha2do</div><div id="cap"></div></div>
+    <div id="phone"><iframe id="screen" src="/" title="wha2do"></iframe></div>
+  </body>
+</html>
