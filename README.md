@@ -14,8 +14,9 @@ Create lists, add tasks with a start time, tick them off, and watch your progres
 
 [![wha2do demo](docs/demo/wha2do-demo.gif)](docs/demo/wha2do-demo.mp4)
 
-A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up, create a list, add tasks, tick them off. Click it for the full 1080p video
-([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)). It is recorded from the browser preview, see below.
+A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up, create a list, add tasks, tick them off. Click it for the full 1080p video **with sound**
+([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)); the GIF is silent. The soundtrack is an original jingle and sound effects synthesised in code
+([`preview/make-audio.py`](preview/make-audio.py)), so there is nothing to license. It is rendered from the browser preview, see below.
 
 ## Features
 
@@ -111,7 +112,7 @@ no Firebase project, emulator or Android SDK, which makes it handy for demos and
 ```bash
 npm run preview         # dev server, open the printed URL in a phone-sized window
 npm run preview:shots   # regenerates docs/screenshots/*.png with Playwright
-npm run preview:video   # re-records docs/demo/wha2do-demo.mp4 and .gif (needs ffmpeg)
+npm run preview:video   # re-renders docs/demo/wha2do-demo.mp4 and .gif (needs ffmpeg and python3 with numpy; takes about 7 minutes)
 ```
 
 Log in with `demo@wha2do.app` / `password123`, or create a new account.
