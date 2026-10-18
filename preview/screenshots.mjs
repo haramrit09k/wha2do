@@ -16,7 +16,7 @@ const server = await createServer({
   logLevel: 'error',
 });
 await server.listen();
-const url = `http://localhost:${server.config.server.port}/`;
+const url = `http://localhost:${server.config.server.port}/?autotime`;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({

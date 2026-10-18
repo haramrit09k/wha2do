@@ -16,7 +16,7 @@ const server = await createServer({
   logLevel: 'error',
 });
 await server.listen();
-const url = `http://localhost:${server.config.server.port}/`;
+const url = `http://localhost:${server.config.server.port}/?autotime`;
 
 const browser = await chromium.launch();
 // 400x800 CSS px at 2.7x = 1080x2160, the tallest ratio Play accepts (2:1).

@@ -15,7 +15,8 @@ import { colors, radius, type } from '../theme';
 // in the browser preview; the hardware back button closes it.
 export default function Sheet({ visible, title, onClose, children }) {
   useEffect(() => {
-    if (!visible) {
+    // There is no hardware back button in a browser (the web demo).
+    if (!visible || Platform.OS === 'web') {
       return undefined;
     }
     const sub = BackHandler.addEventListener('hardwareBackPress', () => {
