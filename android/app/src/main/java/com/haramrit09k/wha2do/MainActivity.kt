@@ -1,4 +1,4 @@
-package com.wha2do
+package com.haramrit09k.wha2do
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

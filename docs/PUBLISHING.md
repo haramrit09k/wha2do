@@ -21,23 +21,12 @@ your own accounts or secrets, so they cannot be done from the repository.
 | Listing text | `store/listing.md` |
 | Privacy policy draft | `docs/privacy-policy.md` |
 
-## 2. The package name and the 2020 Play listing
+## 2. Decide the package name (do this first)
 
-wha2do was first published on Google Play in 2020 as **`com.wha2do`**, and the app now uses that same package
-name (`namespace` and `applicationId` in `android/app/build.gradle`). The package name is permanent per
-listing, and a new version only counts as an *update* of the old listing if both of these match:
-
-1. **The Play Console account that owns `com.wha2do`.** If you can no longer sign in to that developer account
-   (for example it was a teammate's or a university one), you cannot update it.
-2. **The signing key.** If the app was enrolled in **Play App Signing**, open Play Console, then the app,
-   **Test and release, App integrity**, and use *Request upload key reset* if you lost the old key. If it was
-   signed with a self-managed key (common for 2020 apps), you need that original `.jks`; without it you cannot
-   update the listing.
-
-If either is missing, publish as a brand-new app instead: change `namespace` and `applicationId` to a new id,
-and move `android/app/src/main/java/com/wha2do/` and the `package` line in both Kotlin files to match.
-The listing at `play.google.com/store/apps/details?id=com.wha2do` returned "not found" when checked in
-October 2026, which usually means it was unpublished or removed; the Console will show the status and reason.
+The package name (`applicationId`) is **permanent** once you upload your first build. It is currently
+`com.haramrit09k.wha2do`. To change it, edit `namespace` and `applicationId` in `android/app/build.gradle`
+and move `android/app/src/main/java/com/haramrit09k/wha2do/` to match (update the `package` line in both Kotlin
+files).
 
 ## 3. Use your own Firebase project (**you**)
 
