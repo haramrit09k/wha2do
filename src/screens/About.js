@@ -1,3 +1,4 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react';
 import {
   View,
@@ -7,11 +8,10 @@ import {
   TouchableOpacity,
   Linking,
   StyleSheet,
-  SafeAreaView,
 } from 'react-native';
 import Header from '../components/Header';
 import Icon from '../components/Icon';
-import {colors, radius, shadow, type} from '../theme';
+import { colors, radius, shadow, type } from '../theme';
 
 const TEAM = [
   {
@@ -28,7 +28,7 @@ const TEAM = [
   },
 ];
 
-export default function About({navigation}) {
+export default function About({ navigation }) {
   return (
     <SafeAreaView style={styles.root}>
       <Header
@@ -52,7 +52,7 @@ export default function About({navigation}) {
   );
 }
 
-function Link({icon, label, url}) {
+function Link({ icon, label, url }) {
   return (
     <TouchableOpacity style={styles.link} onPress={() => Linking.openURL(url)}>
       <Icon name={icon} size={20} color={colors.primary} />
@@ -62,8 +62,8 @@ function Link({icon, label, url}) {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg},
-  body: {paddingHorizontal: 20, paddingBottom: 32},
+  root: { flex: 1, backgroundColor: colors.bg },
+  body: { paddingHorizontal: 20, paddingBottom: 32 },
   card: {
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: colors.line,
   },
-  name: {marginTop: 12},
-  links: {flexDirection: 'row', marginTop: 12},
+  name: { marginTop: 12 },
+  links: { flexDirection: 'row', marginTop: 12 },
   link: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -89,5 +89,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primarySoft,
     marginHorizontal: 6,
   },
-  linkText: {marginLeft: 6, color: colors.primary, fontWeight: '700'},
+  linkText: { marginLeft: 6, color: colors.primary, fontWeight: '700' },
 });

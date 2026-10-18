@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  SafeAreaView,
   Alert,
   Keyboard,
 } from 'react-native';
@@ -16,12 +16,16 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import EmptyState from '../components/EmptyState';
 import Icon from '../components/Icon';
-import {subscribeLists, addList, removeList, signOut} from '../api';
-import {toast} from '../toast';
-import {iconForList, accentForList} from '../listStyle';
-import {colors, radius, shadow, type} from '../theme';
+import { subscribeLists, addList, removeList } from '../api';
+import { useUser } from '../auth';
+import AccountSheet from '../components/AccountSheet';
+import { toast } from '../toast';
+import { iconForList, accentForList } from '../listStyle';
+import { colors, radius, shadow, type } from '../theme';
 
-export default function Lists({navigation, user}) {
+export default function Lists({ navigation }) {
+  const user = useUser();
+  const [account, setAccount] = useState(false);
   const [lists, setLists] = useState(null);
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState('');
@@ -46,7 +50,7 @@ export default function Lists({navigation, user}) {
       `Delete "${list.name}"?`,
       'All tasks in this list will be removed.',
       [
-        {text: 'Cancel', style: 'cancel'},
+        { text: 'Cancel', style: 'cancel' },
         {
           text: 'Delete',
           style: 'destructive',
@@ -55,12 +59,6 @@ export default function Lists({navigation, user}) {
       ],
     );
 
-  const logout = () =>
-    Alert.alert('Log out?', undefined, [
-      {text: 'Cancel', style: 'cancel'},
-      {text: 'Log out', onPress: signOut},
-    ]);
-
   return (
     <SafeAreaView style={styles.root}>
       <Header
@@ -68,10 +66,11 @@ export default function Lists({navigation, user}) {
         title={user.displayName || 'friend'}
         right={
           <TouchableOpacity
-            accessibilityLabel="Log out"
-            onPress={logout}
-            style={styles.iconBtn}>
-            <Icon name="logout" size={22} color={colors.ink} />
+            accessibilityLabel="Account"
+            onPress={() => setAccount(true)}
+            style={styles.iconBtn}
+          >
+            <Icon name="account-circle-outline" size={24} color={colors.ink} />
           </TouchableOpacity>
         }
       />
@@ -89,7 +88,7 @@ export default function Lists({navigation, user}) {
             />
           ) : null
         }
-        renderItem={({item}) => {
+        renderItem={({ item }) => {
           const accent = accentForList(item.name);
           return (
             <TouchableOpacity
@@ -101,8 +100,9 @@ export default function Lists({navigation, user}) {
                   listName: item.name,
                 })
               }
-              onLongPress={() => confirmDelete(item)}>
-              <View style={[styles.badge, {backgroundColor: accent + '22'}]}>
+              onLongPress={() => confirmDelete(item)}
+            >
+              <View style={[styles.badge, { backgroundColor: accent + '22' }]}>
                 <Icon name={iconForList(item.name)} size={26} color={accent} />
               </View>
               <View style={styles.cardText}>
@@ -119,6 +119,11 @@ export default function Lists({navigation, user}) {
         }}
       />
       <Fab label="New list" onPress={() => setAdding(true)} />
+      <AccountSheet
+        visible={account}
+        user={user}
+        onClose={() => setAccount(false)}
+      />
 
       <Sheet visible={adding} title="New list" onClose={() => setAdding(false)}>
         <Input
@@ -136,9 +141,9 @@ export default function Lists({navigation, user}) {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg},
-  section: {paddingHorizontal: 20, marginTop: 8, marginBottom: 8},
-  listBody: {paddingHorizontal: 20, paddingBottom: 110},
+  root: { flex: 1, backgroundColor: colors.bg },
+  section: { paddingHorizontal: 20, marginTop: 8, marginBottom: 8 },
+  listBody: { paddingHorizontal: 20, paddingBottom: 110 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -155,7 +160,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  cardText: {flex: 1, marginHorizontal: 14},
+  cardText: { flex: 1, marginHorizontal: 14 },
   cardTitle: {
     fontSize: 18,
     fontWeight: '700',
@@ -170,5 +175,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sheetBtn: {marginTop: 14},
+  sheetBtn: { marginTop: 14 },
 });

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,12 @@ import {
   Platform,
   StyleSheet,
 } from 'react-native';
-import {colors, radius, type} from '../theme';
+import { colors, radius, type } from '../theme';
 
 // Bottom sheet used for the "new list" / "new task" / "reset password" forms.
 // Rendered inline (not via RN's <Modal>) so it behaves the same on Android and
 // in the browser preview; the hardware back button closes it.
-export default function Sheet({visible, title, onClose, children}) {
+export default function Sheet({ visible, title, onClose, children }) {
   useEffect(() => {
     if (!visible) {
       return undefined;
@@ -32,7 +32,8 @@ export default function Sheet({visible, title, onClose, children}) {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       pointerEvents="box-none"
-      style={styles.root}>
+      style={styles.root}
+    >
       <TouchableWithoutFeedback onPress={onClose} accessibilityLabel="Close">
         <View style={styles.backdrop} />
       </TouchableWithoutFeedback>
@@ -46,7 +47,7 @@ export default function Sheet({visible, title, onClose, children}) {
 }
 
 const styles = StyleSheet.create({
-  root: {...StyleSheet.absoluteFillObject, justifyContent: 'flex-end'},
+  root: { ...StyleSheet.absoluteFillObject, justifyContent: 'flex-end' },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(20,24,60,0.45)',
@@ -66,5 +67,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.line,
     marginBottom: 16,
   },
-  title: {marginBottom: 16},
+  title: { marginBottom: 16 },
 });

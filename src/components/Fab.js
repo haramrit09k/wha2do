@@ -1,16 +1,17 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet} from 'react-native';
-import {colors, shadow} from '../theme';
+import { TouchableOpacity, StyleSheet } from 'react-native';
+import { colors, shadow } from '../theme';
 import Icon from './Icon';
 
-export default function Fab({icon = 'plus', onPress, label, style}) {
+export default function Fab({ icon = 'plus', onPress, label, style }) {
   return (
     <TouchableOpacity
       accessibilityRole="button"
       accessibilityLabel={label}
       activeOpacity={0.85}
       onPress={onPress}
-      style={[styles.fab, style]}>
+      style={[styles.fab, style]}
+    >
       <Icon name={icon} size={28} color="#fff" />
     </TouchableOpacity>
   );

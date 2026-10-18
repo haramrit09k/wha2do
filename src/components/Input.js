@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, TextInput, Text, Platform, StyleSheet} from 'react-native';
-import {colors, radius} from '../theme';
+import { View, TextInput, Text, Platform, StyleSheet } from 'react-native';
+import { colors, radius } from '../theme';
 import Icon from './Icon';
 
-export default function Input({icon, error, style, ...props}) {
+export default function Input({ icon, error, style, ...props }) {
   return (
     <View style={style}>
       <View style={[styles.row, error && styles.rowError]}>
@@ -38,14 +38,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     height: 54,
   },
-  rowError: {borderColor: colors.danger},
-  icon: {marginRight: 10},
+  rowError: { borderColor: colors.danger },
+  icon: { marginRight: 10 },
   input: {
     flex: 1,
     fontSize: 16,
     color: colors.ink,
     paddingVertical: 0,
-    ...Platform.select({web: {outlineWidth: 0}}),
+    ...Platform.select({ web: { outlineWidth: 0 } }),
   },
-  error: {color: colors.danger, fontSize: 12, marginTop: 4, marginLeft: 6},
+  error: { color: colors.danger, fontSize: 12, marginTop: 4, marginLeft: 6 },
 });

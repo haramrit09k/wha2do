@@ -1,16 +1,17 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {colors, shadow} from '../theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { colors, shadow } from '../theme';
 import Icon from './Icon';
 
-export default function Logo({size = 88, showName = false}) {
+export default function Logo({ size = 88, showName = false }) {
   return (
     <View style={styles.wrap}>
       <View
         style={[
           styles.tile,
-          {width: size, height: size, borderRadius: size * 0.3},
-        ]}>
+          { width: size, height: size, borderRadius: size * 0.3 },
+        ]}
+      >
         <Icon name="clipboard-check-outline" size={size * 0.55} color="#fff" />
       </View>
       {showName ? <Text style={styles.name}>wha2do</Text> : null}
@@ -19,7 +20,7 @@ export default function Logo({size = 88, showName = false}) {
 }
 
 const styles = StyleSheet.create({
-  wrap: {alignItems: 'center'},
+  wrap: { alignItems: 'center' },
   tile: {
     backgroundColor: colors.primary,
     alignItems: 'center',

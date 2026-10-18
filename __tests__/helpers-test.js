@@ -1,6 +1,6 @@
-import {iconForList, accentForList} from '../src/listStyle';
-import {signUpSchema} from '../src/screens/SignUp';
-import {formatTime} from '../src/screens/Tasks';
+import { iconForList, accentForList } from '../src/listStyle';
+import { signUpSchema } from '../src/screens/SignUp';
+import { formatTime } from '../src/screens/Tasks';
 
 describe('listStyle', () => {
   it('matches icons to list names', () => {
@@ -35,7 +35,7 @@ describe('signUpSchema', () => {
     ['password', 'short'],
   ])('rejects a bad %s', async (field, value) => {
     await expect(
-      signUpSchema.isValid({...valid, [field]: value}),
+      signUpSchema.isValid({ ...valid, [field]: value }),
     ).resolves.toBe(false);
   });
 });

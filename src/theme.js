@@ -14,19 +14,19 @@ export const colors = {
   dangerSoft: '#FDECEC',
 };
 
-export const radius = {sm: 10, md: 16, lg: 24, pill: 999};
+export const radius = { sm: 10, md: 16, lg: 24, pill: 999 };
 
 export const shadow = {
   shadowColor: '#2A3170',
-  shadowOffset: {width: 0, height: 6},
+  shadowOffset: { width: 0, height: 6 },
   shadowOpacity: 0.1,
   shadowRadius: 16,
   elevation: 4,
 };
 
 export const type = {
-  title: {fontSize: 30, fontWeight: '800', color: colors.ink},
-  heading: {fontSize: 20, fontWeight: '700', color: colors.ink},
-  body: {fontSize: 16, color: colors.ink},
-  caption: {fontSize: 13, color: colors.muted},
+  title: { fontSize: 30, fontWeight: '800', color: colors.ink },
+  heading: { fontSize: 20, fontWeight: '700', color: colors.ink },
+  body: { fontSize: 16, color: colors.ink },
+  caption: { fontSize: 13, color: colors.muted },
 };

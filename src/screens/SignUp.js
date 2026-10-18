@@ -1,19 +1,14 @@
-import React, {useState} from 'react';
-import {
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Keyboard,
-  ScrollView,
-} from 'react-native';
-import {Formik} from 'formik';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { Text, StyleSheet, Keyboard, ScrollView } from 'react-native';
+import { Formik } from 'formik';
 import * as yup from 'yup';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import Button from '../components/Button';
-import {signUp, authErrorMessage} from '../api';
-import {toast} from '../toast';
-import {colors} from '../theme';
+import { signUp, authErrorMessage } from '../api';
+import { toast } from '../toast';
+import { colors } from '../theme';
 
 export const signUpSchema = yup.object({
   username: yup
@@ -35,7 +30,7 @@ export const signUpSchema = yup.object({
     .max(32, 'At most 32 characters'),
 });
 
-export default function SignUp({navigation}) {
+export default function SignUp({ navigation }) {
   const [busy, setBusy] = useState(false);
 
   const onSubmit = async values => {
@@ -58,13 +53,15 @@ export default function SignUp({navigation}) {
         onBack={navigation.goBack}
       />
       <Formik
-        initialValues={{username: '', email: '', phone: '', password: ''}}
+        initialValues={{ username: '', email: '', phone: '', password: '' }}
         validationSchema={signUpSchema}
-        onSubmit={onSubmit}>
+        onSubmit={onSubmit}
+      >
         {f => (
           <ScrollView
             contentContainerStyle={styles.body}
-            keyboardShouldPersistTaps="handled">
+            keyboardShouldPersistTaps="handled"
+          >
             <Field
               f={f}
               name="username"
@@ -101,7 +98,8 @@ export default function SignUp({navigation}) {
             />
             <Text
               style={styles.switch}
-              onPress={() => navigation.replace('Login')}>
+              onPress={() => navigation.replace('Login')}
+            >
               Already have an account?{' '}
               <Text style={styles.switchBold}>Log in</Text>
             </Text>
@@ -112,7 +110,7 @@ export default function SignUp({navigation}) {
   );
 }
 
-function Field({f, name, ...props}) {
+function Field({ f, name, ...props }) {
   return (
     <Input
       style={styles.field}
@@ -126,10 +124,10 @@ function Field({f, name, ...props}) {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg},
-  body: {paddingHorizontal: 24, paddingBottom: 32},
-  field: {marginBottom: 14},
-  submit: {marginTop: 8},
-  switch: {marginTop: 24, textAlign: 'center', color: colors.muted},
-  switchBold: {color: colors.primary, fontWeight: '700'},
+  root: { flex: 1, backgroundColor: colors.bg },
+  body: { paddingHorizontal: 24, paddingBottom: 32 },
+  field: { marginBottom: 14 },
+  submit: { marginTop: 8 },
+  switch: { marginTop: 24, textAlign: 'center', color: colors.muted },
+  switchBold: { color: colors.primary, fontWeight: '700' },
 });

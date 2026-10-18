@@ -5,7 +5,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import {colors, radius} from '../theme';
+import { colors, radius } from '../theme';
 
 export default function Button({
   title,
@@ -15,7 +15,8 @@ export default function Button({
   disabled,
   style,
 }) {
-  const isPrimary = variant === 'primary';
+  const isPrimary = variant === 'primary' || variant === 'danger';
+  const isDanger = variant === 'danger' || variant === 'dangerGhost';
   return (
     <TouchableOpacity
       accessibilityRole="button"
@@ -25,13 +26,21 @@ export default function Button({
       style={[
         styles.base,
         isPrimary ? styles.primary : styles.ghost,
+        isDanger && (isPrimary ? styles.dangerFill : styles.dangerOutline),
         (disabled || loading) && styles.disabled,
         style,
-      ]}>
+      ]}
+    >
       {loading ? (
         <ActivityIndicator color={isPrimary ? '#fff' : colors.primary} />
       ) : (
-        <Text style={[styles.text, !isPrimary && styles.ghostText]}>
+        <Text
+          style={[
+            styles.text,
+            !isPrimary && styles.ghostText,
+            variant === 'dangerGhost' && styles.dangerText,
+          ]}
+        >
           {title}
         </Text>
       )}
@@ -48,13 +57,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignSelf: 'stretch',
   },
-  primary: {backgroundColor: colors.primary},
+  primary: { backgroundColor: colors.primary },
   ghost: {
     backgroundColor: 'transparent',
     borderWidth: 2,
     borderColor: colors.primary,
   },
-  disabled: {opacity: 0.6},
-  text: {color: '#fff', fontSize: 16, fontWeight: '700', letterSpacing: 0.3},
-  ghostText: {color: colors.primary},
+  dangerFill: { backgroundColor: colors.danger },
+  dangerOutline: { borderColor: colors.danger },
+  dangerText: { color: colors.danger },
+  disabled: { opacity: 0.6 },
+  text: { color: '#fff', fontSize: 16, fontWeight: '700', letterSpacing: 0.3 },
+  ghostText: { color: colors.primary },
 });
