@@ -47,6 +47,31 @@ is a **brand-new app on a new developer account**, not an update:
 - A new signing key is fine here (section 4), because nothing already installed needs to be updated. People who
   still have the 2020 app installed will not receive this one as an update.
 
+## 2b. Automation (GitHub Actions)
+
+- **CI** (`.github/workflows/ci.yml`) runs on every push and pull request: lint, tests, the web-demo build and an Android debug build.
+- **Live demo** (`pages.yml`): one-time setup, repository **Settings, Pages, Source: GitHub Actions**. After that every push to `master` redeploys `https://<user>.github.io/wha2do/`.
+- **Signed release** (`release.yml`): add four repository secrets (Settings, Secrets and variables, Actions), then push a tag.
+
+  ```bash
+  base64 -w0 wha2do-upload.jks        # value for ANDROID_KEYSTORE_BASE64 (macOS: base64 -i wha2do-upload.jks)
+  # ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD: the values you chose in section 4
+  git tag v1.0.0 && git push origin v1.0.0
+  ```
+
+  The workflow attaches a signed `.apk` (for sideloading) and `.aab` (for Play) to a GitHub Release. This workflow has
+  not been run yet, because it needs your key; the Gradle commands it uses were run locally.
+
+## 2c. Yearly upkeep (about 15 minutes)
+
+Nothing here needs attention day to day. Once a year, around the summer:
+
+1. Check Google's current **target API level** requirement for Play. If it moved, bump `targetSdkVersion` in
+   `android/build.gradle` (and `compileSdkVersion` if needed), push, and let CI confirm it still builds.
+2. Raise `versionCode` in `android/app/build.gradle`, tag a release, upload the new `.aab` in Play Console.
+3. Sign in to Play Console and the Firebase console once, so neither account looks abandoned (Google closes
+   developer accounts after long inactivity, which is what happened to the 2020 account).
+
 ## 3. Use your own Firebase project (**you**)
 
 The Firebase project in `src/firebase.js` came from the original coursework and may be gone or shared.
