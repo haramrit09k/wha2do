@@ -1,4 +1,4 @@
-package com.haramrit09k.wha2do
+package com.lilsardarx.wha2do
 
 import android.app.Application
 import com.facebook.react.PackageList

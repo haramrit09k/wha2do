@@ -16,7 +16,7 @@ Create lists, add tasks with a start time, tick them off, and watch your progres
 
 A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up, create a list, add tasks, tick them off. Click it for the full 1080p video **with sound**
 ([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)); the GIF is silent. The soundtrack is an original jingle and sound effects synthesised in code
-([`preview/make-audio.py`](preview/make-audio.py)), so there is nothing to license. It is rendered from the browser preview, see below.
+([`preview/make-audio.py`](preview/make-audio.py)), so there is nothing to license. It is rendered from the browser preview, see below. (The video was recorded before the unused phone-number field was removed from sign-up, so it still shows that field; `npm run preview:video` re-records it.)
 
 ## Features
 
@@ -98,7 +98,7 @@ writable by that user only.
 Data layout:
 
 ```text
-users/{uid}/profile              { username, email, phone }
+users/{uid}/profile              { username, email }
 users/{uid}/lists/{listId}       { name, createdAt }
 users/{uid}/tasks/{listId}/{id}  { name, time, done, createdAt }
 ```
@@ -150,7 +150,7 @@ scripts/                icon generator
 ## What changed in the revival
 
 - **Fixed a startup crash.** `SignUp.js` assigned undeclared globals at module level, which throws in strict mode, and `src/config.js` imported a package that was never installed.
-- **Stopped storing passwords.** Sign-up used to save an MD5 hash of the password in the database. Firebase Auth already handles credentials, so the profile now holds only the username, email and phone number.
+- **Stopped storing passwords.** Sign-up used to save an MD5 hash of the password in the database. Firebase Auth already handles credentials, so the profile now holds only the username and email.
 - **Real persistence.** Lists and tasks were kept in component state with hard-coded samples and then lost. They are now stored per user in Firebase and streamed live.
 - **Auth-driven navigation.** The navigator shows the onboarding or app screens based on the sign-in state, instead of calling `navigate()` after every login and logout.
 - **New design.** A shared theme and component set replaces the nested-`View` layouts, with tap-to-complete tasks, a progress bar, bottom sheets and empty states.
@@ -169,7 +169,6 @@ checklist, including the steps only you can do (your own Firebase project, uploa
 
 - The app has not been run on a physical device or emulator yet. Do a pass on a real phone before publishing, paying attention to the keyboard behaviour in the bottom sheets (the app uses edge-to-edge layout).
 - The Firebase project in `src/firebase.js` may no longer exist or accept requests. Use your own project, and restrict its API key in the Google Cloud console.
-- Sign-up asks for a phone number that nothing uses yet. Consider removing it (less data to protect and declare).
 - The old iOS project was removed in the React Native upgrade; generate a fresh one if you want an iOS build.
 
 ## Team

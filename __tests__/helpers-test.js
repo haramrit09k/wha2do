@@ -20,7 +20,6 @@ describe('signUpSchema', () => {
   const valid = {
     username: 'alex',
     email: 'alex@example.com',
-    phone: '5551234567',
     password: 'password123',
   };
 
@@ -31,7 +30,6 @@ describe('signUpSchema', () => {
   it.each([
     ['username', 'al'],
     ['email', 'alex@'],
-    ['phone', '55512'],
     ['password', 'short'],
   ])('rejects a bad %s', async (field, value) => {
     await expect(

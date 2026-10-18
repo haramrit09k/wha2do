@@ -19,10 +19,6 @@ export const signUpSchema = yup.object({
     .string()
     .required('Email is required')
     .email('Not a valid email address'),
-  phone: yup
-    .string()
-    .required('Phone number is required')
-    .matches(/^\d{10}$/, 'Phone number must be 10 digits'),
   password: yup
     .string()
     .required('Password is required')
@@ -53,7 +49,7 @@ export default function SignUp({ navigation }) {
         onBack={navigation.goBack}
       />
       <Formik
-        initialValues={{ username: '', email: '', phone: '', password: '' }}
+        initialValues={{ username: '', email: '', password: '' }}
         validationSchema={signUpSchema}
         onSubmit={onSubmit}
       >
@@ -74,14 +70,6 @@ export default function SignUp({ navigation }) {
               icon="email-outline"
               placeholder="Email address"
               keyboardType="email-address"
-            />
-            <Field
-              f={f}
-              name="phone"
-              icon="phone-outline"
-              placeholder="Phone (10 digits)"
-              keyboardType="phone-pad"
-              maxLength={10}
             />
             <Field
               f={f}

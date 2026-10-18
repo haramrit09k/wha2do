@@ -307,7 +307,6 @@ await tap(text('Create an account'), 2);
 await medium();
 await type(field('Username'), 'Alex', 2.4);
 await type(field('Email address'), 'alex@example.com', 2.4);
-await type(field('Phone (10 digits)'), '5551234567', 2.4);
 await type(field('Password (8+ characters)'), 'password123', 2.4);
 await caption('Forms are validated as you type');
 await medium(900);

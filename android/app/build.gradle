@@ -92,9 +92,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.haramrit09k.wha2do"
+    namespace "com.lilsardarx.wha2do"
     defaultConfig {
-        applicationId "com.haramrit09k.wha2do"
+        applicationId "com.lilsardarx.wha2do"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

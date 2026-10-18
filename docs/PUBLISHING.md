@@ -38,11 +38,11 @@ is a **brand-new app on a new developer account**, not an update:
   account avoids that but needs a D-U-N-S number. Check the Console for the current rules. Also complete
   Android developer verification if the Console asks for it.
 - The package name is **permanent** once you upload your first build, and it must be unique across Play. The app
-  uses `com.haramrit09k.wha2do`. Package names of deleted apps generally cannot be reused, so `com.wha2do` is
-  most likely unavailable; if you want to try it anyway, change it as described below and let the Console's
+  uses `com.lilsardarx.wha2do`. Package names of deleted apps generally cannot be reused, so the old `com.wha2do`
+  is most likely unavailable; if you want to try it anyway, change it as described below and let the Console's
   first upload tell you (it rejects a taken name), before you invest in anything else.
 - To change it, edit `namespace` and `applicationId` in `android/app/build.gradle`, move
-  `android/app/src/main/java/com/haramrit09k/wha2do/` to the matching folder, and update the `package` line in
+  `android/app/src/main/java/com/lilsardarx/wha2do/` to the matching folder, and update the `package` line in
   both Kotlin files.
 - A new signing key is fine here (section 4), because nothing already installed needs to be updated. People who
   still have the 2020 app installed will not receive this one as an update.
@@ -117,7 +117,6 @@ To test on a device first: `npm run build:apk` gives a signed APK you can sidelo
 | --- | --- | --- | --- | --- |
 | Email address | Yes | No | Account management | No |
 | Name (the username the person types) | Yes | No | Account management, app functionality | No |
-| Phone number | Yes | No | Account profile (stored, not used for anything else yet) | No |
 | User IDs (Firebase uid) | Yes | No | Account management | No |
 | Other user-generated content (lists and tasks) | Yes | No | App functionality | No |
 
@@ -125,7 +124,8 @@ To test on a device first: `npm run build:apk` gives a signed APK you can sidelo
 - Users can **request deletion**: yes, in the app (Account, then Delete account) and by email.
 - No ads, no analytics, no data sold. Firebase (Google) acts as a service provider, which Play does not count as
   "sharing".
-- If you remove the phone-number field from sign-up (recommended, since it is not used), remove that row too.
+- Sign-up no longer asks for a phone number, so none is collected. (Accounts created by earlier test builds may
+  still have one stored; delete those accounts in the Firebase console.)
 
 ## 7. Before you hit "Release"
 

@@ -53,10 +53,10 @@ export const signIn = (email, password) =>
 
 // Creates the account, sets the display name and stores a small profile.
 // Passwords are handled by Firebase Auth only and are never written to the DB.
-export const signUp = async ({ username, email, password, phone }) => {
+export const signUp = async ({ username, email, password }) => {
   const { user } = await createUserWithEmailAndPassword(auth, email, password);
   await updateProfile(user, { displayName: username });
-  await set(child(userRef(user.uid), 'profile'), { username, email, phone });
+  await set(child(userRef(user.uid), 'profile'), { username, email });
   profileListeners.forEach(fn => fn());
   return user;
 };

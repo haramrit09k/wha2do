@@ -25,7 +25,6 @@ describe('auth', () => {
       username: 'pat',
       email: 'pat@example.com',
       password: 'correct-horse',
-      phone: '5550000000',
     });
     expect(seen).toHaveBeenCalledTimes(1);
     stop();
@@ -37,7 +36,6 @@ describe('auth', () => {
       username: 'sam',
       email: 'sam@example.com',
       password: 'hunter2hunter2',
-      phone: '5551234567',
     });
     expect(user.displayName).toBe('sam');
 
@@ -45,7 +43,6 @@ describe('auth', () => {
     expect(profile).toEqual({
       username: 'sam',
       email: 'sam@example.com',
-      phone: '5551234567',
     });
     expect(JSON.stringify(profile)).not.toMatch(/hunter2/);
   });
@@ -57,7 +54,6 @@ describe('auth', () => {
         username: 'sam',
         email: 'sam@example.com',
         password: 'x',
-        phone: '1',
       }),
     ).rejects.toMatchObject({ code: 'auth/email-already-in-use' });
     await expect(signIn('sam@example.com', 'nope')).rejects.toMatchObject({
@@ -115,7 +111,6 @@ describe('account deletion', () => {
       username: 'gone',
       email: 'gone@example.com',
       password: 'bye-bye-bye',
-      phone: '5551111111',
     });
     await addList(user.uid, 'Temp');
     await deleteAccount(user);
