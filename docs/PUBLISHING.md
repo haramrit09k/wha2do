@@ -21,6 +21,11 @@ your own accounts or secrets, so they cannot be done from the repository.
 | Listing text | `store/listing.md` |
 | Privacy policy draft | `docs/privacy-policy.md` |
 
+**Verified build (October 2026, Linux, JDK 17 toolchain, Android SDK 37):** `assembleDebug` and a signed
+`bundleRelease` both succeed. The bundle is signed, targets SDK 36 (min 24), requests only `INTERNET`, has
+cleartext traffic disabled, embeds the Hermes JavaScript bundle, and every native library (arm64-v8a, armeabi-v7a,
+x86, x86_64) is 16 KB page-aligned as Play now requires. It has not been installed on a device or emulator.
+
 ## 2. The 2020 listing, a new developer account, and the package name
 
 wha2do was first published on Google Play in 2020 as `com.wha2do`. That developer account was **closed for
