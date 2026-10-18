@@ -3,20 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <title>wha2do preview</title>
+    <meta name="description" content="Live demo of wha2do, a to-do list and day planner for Android built with React Native and Firebase. Runs the real app screens with sample data." />
+    <title>wha2do: live demo</title>
     <style>
       @font-face {
         font-family: 'MaterialCommunityIcons';
-        src: url('/fonts/MaterialCommunityIcons.ttf') format('truetype');
+        src: url('./fonts/MaterialCommunityIcons.ttf') format('truetype');
       }
-      html, body, #root { height: 100%; margin: 0; }
-      body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #dfe4f7; }
-      #root { display: flex; }
+      html, body { height: 100%; margin: 0; }
+      body {
+        font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        background: linear-gradient(135deg, #2b3bd6, #4154fe 50%, #8a99ff);
+        color: #fff;
+      }
+      #stage { min-height: 100%; display: flex; align-items: center; justify-content: center; gap: 64px; padding: 24px; box-sizing: border-box; }
+      #info { max-width: 380px; }
+      #info h1 { margin: 0; font-size: 56px; font-style: italic; font-weight: 900; letter-spacing: -2px; }
+      #info p { font-size: 18px; line-height: 1.5; opacity: .92; margin: 14px 0; }
+      #info .creds { background: rgba(20, 24, 60, .35); border-radius: 14px; padding: 14px 16px; font-size: 15px; line-height: 1.6; }
+      #info .creds code { background: rgba(255,255,255,.18); padding: 2px 6px; border-radius: 6px; font-size: 14px; }
+      #info a { color: #fff; font-weight: 700; }
+      #phone { width: 400px; height: 820px; max-height: calc(100vh - 48px); padding: 10px; box-sizing: border-box; border-radius: 52px; background: #14183c; box-shadow: 0 40px 90px rgba(10, 14, 60, .55); flex: none; }
+      #root { height: 100%; display: flex; border-radius: 42px; overflow: hidden; background: #f4f7ff; }
+      /* Phones (and the screenshot/video tooling): the app fills the whole screen, no frame. */
+      @media (max-width: 760px) {
+        #stage { padding: 0; display: block; height: 100%; min-height: 0; }
+        #info { display: none; }
+        #phone { width: 100%; height: 100%; max-height: none; padding: 0; border-radius: 0; background: none; box-shadow: none; }
+        #root { border-radius: 0; }
+      }
     </style>
   </head>
   <body>
     <script>window.__WHA2DO_SEED__ = true;</script>
-    <div id="root"></div>
-    <script type="module" src="/main.jsx"></script>
+    <div id="stage">
+      <aside id="info">
+        <h1>wha2do</h1>
+        <p>A to-do list and day planner for Android, built with React Native and Firebase. This page runs the real app screens in your browser with sample data.</p>
+        <div class="creds">
+          Log in with<br />
+          <code>demo@wha2do.app</code> / <code>password123</code><br />
+          or just create an account. Nothing is saved: reloading resets the demo.
+        </div>
+        <p><a href="https://github.com/haramrit09k/wha2do">Source code and Android app on GitHub</a></p>
+      </aside>
+      <div id="phone"><div id="root"></div></div>
+    </div>
+    <script type="module" src="./main.jsx"></script>
   </body>
 </html>

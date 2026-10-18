@@ -58,6 +58,7 @@ const wha2doPlugin = () => ({
 
 export default defineConfig({
   root: here,
+  base: './',
   plugins: [wha2doPlugin()],
   define: { __DEV__: 'false', global: 'window' },
   server: { fs: { allow: [root] } },
@@ -112,5 +113,21 @@ export default defineConfig({
       resolveExtensions: ['.web.js', '.js', '.jsx', '.json', '.mjs'],
     },
   },
-  build: { outDir: path.join(here, 'dist'), emptyOutDir: true },
+  build: {
+    outDir: path.join(here, 'dist'),
+    emptyOutDir: true,
+    chunkSizeWarningLimit: 1500,
+    rollupOptions: {
+      // react-native-web and safe-area-context ship "use client" directives that the
+      // bundler ignores; that is harmless, so keep the build log quiet.
+      onwarn(warning, warn) {
+        if (
+          warning.code !== 'MODULE_LEVEL_DIRECTIVE' &&
+          warning.code !== 'SOURCEMAP_ERROR'
+        ) {
+          warn(warning);
+        }
+      },
+    },
+  },
 });

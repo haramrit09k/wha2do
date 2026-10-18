@@ -6,9 +6,27 @@
 
 Create lists, add tasks with a start time, tick them off, and watch your progress bar fill up.
 
+[![CI](https://github.com/haramrit09k/wha2do/actions/workflows/ci.yml/badge.svg)](https://github.com/haramrit09k/wha2do/actions/workflows/ci.yml)
+
+**[Try the live demo in your browser](https://haramrit09k.github.io/wha2do/)** · [Watch the demo video](docs/demo/wha2do-demo.mp4) · [Engineering highlights](#engineering-highlights)
+
 ![wha2do screens](docs/screenshots/overview.png)
 
 </div>
+
+## Engineering highlights
+
+The point of this project is not the to-do list, it is everything around it that makes an Android app shippable
+and keeps it healthy without constant attention.
+
+- **Modern Android target.** React Native 0.88 (new architecture, Hermes), `targetSdk 36`, edge-to-edge layout, `minSdk 24`, and native libraries verified to be 16 KB page-aligned as Google Play now requires.
+- **Real release engineering.** Release signing is read from a git-ignored `keystore.properties`; building a Play bundle without your own key fails on purpose so a debug-signed build can never be uploaded. A tag-triggered workflow builds the signed APK and AAB and attaches them to a GitHub Release ([`release.yml`](.github/workflows/release.yml)).
+- **Continuous integration.** Every push runs lint, the Jest suite, a build of the web demo and a full Android build ([`ci.yml`](.github/workflows/ci.yml)); a separate workflow publishes the web demo to GitHub Pages ([`pages.yml`](.github/workflows/pages.yml)).
+- **Privacy and policy compliance.** Passwords never touch the database, Firebase rules restrict each user to their own data, and the app includes in-app **account deletion** (a Google Play requirement) that removes the data and then the account. A privacy policy draft, data-safety answers and a Play listing kit are in [`docs/`](docs/PUBLISHING.md) and [`store/`](store).
+- **Testable by design.** All backend calls sit behind one module (`src/api.js`), so the whole UI runs and is tested against an in-memory stand-in for Firebase. That is what powers the live demo, the screenshots, the demo video and the Jest suite, with no backend and no credentials.
+- **Tooling that explains itself.** Generated launcher icons, store screenshots and a camera-driven demo video with a synthesised soundtrack, all reproducible from scripts in this repo.
+
+Not done yet: a published Google Play listing (it needs a new developer account, see [`docs/PUBLISHING.md`](docs/PUBLISHING.md)) and a run on a physical device.
 
 ## Demo
 
