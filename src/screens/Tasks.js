@@ -26,6 +26,11 @@ export const formatTime = date =>
     date.getMinutes(),
   ).padStart(2, '0')}`;
 
+// The native Android picker also calls onChange when it is cancelled, passing the
+// current date as the second argument. Only a confirmed pick ('set') counts.
+export const timeFromPick = (event, picked) =>
+  event && event.type === 'set' && picked ? formatTime(picked) : null;
+
 export default function Tasks({ route, navigation }) {
   const user = useUser();
   const { listId, listName } = route.params;
@@ -62,8 +67,9 @@ export default function Tasks({ route, navigation }) {
 
   const onPick = (event, picked) => {
     setPicking(false);
-    if (picked) {
-      setTime(formatTime(picked));
+    const picked24 = timeFromPick(event, picked);
+    if (picked24) {
+      setTime(picked24);
     }
   };
 
