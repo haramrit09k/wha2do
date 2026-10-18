@@ -1,24 +1,18 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  Keyboard,
-  ScrollView,
-} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Keyboard, ScrollView } from 'react-native';
 import Header from '../components/Header';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import Sheet from '../components/Sheet';
 import Logo from '../components/Logo';
-import {signIn, resetPassword, authErrorMessage} from '../api';
-import {toast} from '../toast';
-import {colors, type} from '../theme';
+import { signIn, resetPassword, authErrorMessage } from '../api';
+import { toast } from '../toast';
+import { colors, type } from '../theme';
 
 const EMAIL = /^\S+@\S+\.\S+$/;
 
-export default function Login({navigation}) {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
@@ -65,7 +59,8 @@ export default function Login({navigation}) {
       />
       <ScrollView
         contentContainerStyle={styles.body}
-        keyboardShouldPersistTaps="handled">
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.logo}>
           <Logo size={72} />
         </View>
@@ -89,7 +84,8 @@ export default function Login({navigation}) {
           onPress={() => {
             setResetEmail(email);
             setForgot(true);
-          }}>
+          }}
+        >
           Forgot password?
         </Text>
         <Button
@@ -100,7 +96,8 @@ export default function Login({navigation}) {
         />
         <Text
           style={styles.switch}
-          onPress={() => navigation.replace('SignUp')}>
+          onPress={() => navigation.replace('SignUp')}
+        >
           New here? <Text style={styles.switchBold}>Create an account</Text>
         </Text>
       </ScrollView>
@@ -108,7 +105,8 @@ export default function Login({navigation}) {
       <Sheet
         visible={forgot}
         title="Reset your password"
-        onClose={() => setForgot(false)}>
+        onClose={() => setForgot(false)}
+      >
         <Text style={[type.caption, styles.hint]}>
           We'll email you a link to choose a new password.
         </Text>
@@ -130,17 +128,17 @@ export default function Login({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg},
-  body: {paddingHorizontal: 24, paddingBottom: 32},
-  logo: {alignItems: 'center', marginVertical: 24},
-  gap: {marginTop: 14},
-  hint: {marginBottom: 12},
+  root: { flex: 1, backgroundColor: colors.bg },
+  body: { paddingHorizontal: 24, paddingBottom: 32 },
+  logo: { alignItems: 'center', marginVertical: 24 },
+  gap: { marginTop: 14 },
+  hint: { marginBottom: 12 },
   forgot: {
     alignSelf: 'flex-end',
     marginTop: 12,
     color: colors.primary,
     fontWeight: '700',
   },
-  switch: {marginTop: 24, textAlign: 'center', color: colors.muted},
-  switchBold: {color: colors.primary, fontWeight: '700'},
+  switch: { marginTop: 24, textAlign: 'center', color: colors.muted },
+  switchBold: { color: colors.primary, fontWeight: '700' },
 });

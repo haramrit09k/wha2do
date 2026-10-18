@@ -1,4 +1,4 @@
-import firebase from '../src/firebase';
+import { getAt } from '../preview/mock/store';
 import {
   signUp,
   signIn,
@@ -11,30 +11,38 @@ import {
   setTaskDone,
   removeTask,
   removeList,
+  deleteAccount,
+  onProfileUpdated,
 } from '../src/api';
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0));
 
 describe('auth', () => {
+  it('tells the UI when the display name has been saved', async () => {
+    const seen = jest.fn();
+    const stop = onProfileUpdated(seen);
+    await signUp({
+      username: 'pat',
+      email: 'pat@example.com',
+      password: 'correct-horse',
+    });
+    expect(seen).toHaveBeenCalledTimes(1);
+    stop();
+    await signOut();
+  });
+
   it('signs a user up, stores a profile and never stores the password', async () => {
     const user = await signUp({
       username: 'sam',
       email: 'sam@example.com',
       password: 'hunter2hunter2',
-      phone: '5551234567',
     });
     expect(user.displayName).toBe('sam');
 
-    const profile = await new Promise(resolve =>
-      firebase
-        .database()
-        .ref(`users/${user.uid}/profile`)
-        .on('value', s => resolve(s.val())),
-    );
+    const profile = getAt(`users/${user.uid}/profile`);
     expect(profile).toEqual({
       username: 'sam',
       email: 'sam@example.com',
-      phone: '5551234567',
     });
     expect(JSON.stringify(profile)).not.toMatch(/hunter2/);
   });
@@ -46,16 +54,15 @@ describe('auth', () => {
         username: 'sam',
         email: 'sam@example.com',
         password: 'x',
-        phone: '1',
       }),
-    ).rejects.toMatchObject({code: 'auth/email-already-in-use'});
+    ).rejects.toMatchObject({ code: 'auth/email-already-in-use' });
     await expect(signIn('sam@example.com', 'nope')).rejects.toMatchObject({
       code: 'auth/wrong-password',
     });
     await expect(signIn('ghost@example.com', 'nope')).rejects.toMatchObject({
       code: 'auth/user-not-found',
     });
-    expect(authErrorMessage({code: 'auth/wrong-password'})).toMatch(
+    expect(authErrorMessage({ code: 'auth/wrong-password' })).toMatch(
       /incorrect/i,
     );
     expect(authErrorMessage(new Error('boom'))).toMatch(/went wrong/i);
@@ -74,8 +81,8 @@ describe('lists and tasks', () => {
     const listId = lists[0].id;
     let tasks = [];
     const stopTasks = subscribeTasks(uid, listId, t => (tasks = t));
-    await addTask(uid, listId, {name: 'Milk', time: '09:30'});
-    await addTask(uid, listId, {name: 'Eggs'});
+    await addTask(uid, listId, { name: 'Milk', time: '09:30' });
+    await addTask(uid, listId, { name: 'Eggs' });
     await flush();
     expect(tasks.map(t => t.name).sort()).toEqual(['Eggs', 'Milk']);
     expect(tasks.every(t => t.done === false)).toBe(true);
@@ -95,5 +102,23 @@ describe('lists and tasks', () => {
     expect(tasks).toEqual([]);
     stopLists();
     stopTasks();
+  });
+});
+
+describe('account deletion', () => {
+  it('removes the user data and the account', async () => {
+    const user = await signUp({
+      username: 'gone',
+      email: 'gone@example.com',
+      password: 'bye-bye-bye',
+    });
+    await addList(user.uid, 'Temp');
+    await deleteAccount(user);
+    expect(getAt(`users/${user.uid}`)).toBeUndefined();
+    await expect(
+      signIn('gone@example.com', 'bye-bye-bye'),
+    ).rejects.toMatchObject({
+      code: 'auth/user-not-found',
+    });
   });
 });

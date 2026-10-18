@@ -1,7 +1,7 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {Animated, Text, StyleSheet} from 'react-native';
-import {subscribeToast} from '../toast';
-import {colors, radius} from '../theme';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Text, StyleSheet } from 'react-native';
+import { subscribeToast } from '../toast';
+import { colors, radius } from '../theme';
 
 export default function ToastHost() {
   const [message, setMessage] = useState('');
@@ -30,7 +30,7 @@ export default function ToastHost() {
   );
 
   return (
-    <Animated.View pointerEvents="none" style={[styles.toast, {opacity}]}>
+    <Animated.View pointerEvents="none" style={[styles.toast, { opacity }]}>
       <Text style={styles.text}>{message}</Text>
     </Animated.View>
   );
@@ -47,5 +47,5 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 18,
   },
-  text: {color: '#fff', fontSize: 15, textAlign: 'center'},
+  text: { color: '#fff', fontSize: 15, textAlign: 'center' },
 });

@@ -1,26 +1,15 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 
 const root = path.resolve(__dirname, '..');
 const here = __dirname;
 const rootModules = path.join(root, 'node_modules');
 
-// Swap the real Firebase module for the in-memory mock, and turn the
-// `require('./x.jpg')` calls that Metro understands into ES imports.
+// Turn the `require('./x.jpg')` calls that Metro understands into ES imports.
 const wha2doPlugin = () => ({
   name: 'wha2do-preview',
   enforce: 'pre',
-  resolveId(id, importer) {
-    if (
-      importer &&
-      importer.endsWith(path.join('src', 'api.js')) &&
-      id === './firebase'
-    ) {
-      return path.join(here, 'mockFirebase.js');
-    }
-    return null;
-  },
   transform(code, id) {
     if (!id.startsWith(path.join(root, 'src')) || !/require\(['"]/.test(code)) {
       return null;
@@ -38,7 +27,7 @@ const wha2doPlugin = () => ({
         return name;
       },
     );
-    return {code: `${imports.join('\n')}\n${out}`, map: null};
+    return { code: `${imports.join('\n')}\n${out}`, map: null };
   },
   configureServer(server) {
     server.middlewares.use('/fonts/MaterialCommunityIcons.ttf', (req, res) => {
@@ -70,15 +59,15 @@ const wha2doPlugin = () => ({
 export default defineConfig({
   root: here,
   plugins: [wha2doPlugin()],
-  define: {__DEV__: 'false', global: 'window'},
-  server: {fs: {allow: [root]}},
+  define: { __DEV__: 'false', global: 'window' },
+  server: { fs: { allow: [root] } },
   resolve: {
     alias: [
       {
         find: /^react-native$/,
         replacement: path.join(here, 'node_modules/react-native-web'),
       },
-      {find: /^react$/, replacement: path.join(here, 'node_modules/react')},
+      { find: /^react$/, replacement: path.join(here, 'node_modules/react') },
       {
         find: /^react-dom$/,
         replacement: path.join(here, 'node_modules/react-dom'),
@@ -87,9 +76,19 @@ export default defineConfig({
         find: /^react-native-web$/,
         replacement: path.join(here, 'node_modules/react-native-web'),
       },
+      // Firebase and AsyncStorage are swapped for in-memory stand-ins (preview/mock).
+      { find: /^firebase\/app$/, replacement: path.join(here, 'mock/app.js') },
       {
-        find: /^react-native-gesture-handler$/,
-        replacement: path.join(here, 'stubs/empty.js'),
+        find: /^firebase\/auth$/,
+        replacement: path.join(here, 'mock/auth.js'),
+      },
+      {
+        find: /^firebase\/database$/,
+        replacement: path.join(here, 'mock/database.js'),
+      },
+      {
+        find: /^@react-native-async-storage\/async-storage$/,
+        replacement: path.join(here, 'stubs/async-storage.js'),
       },
       {
         find: /^react-native-vector-icons\/MaterialCommunityIcons$/,
@@ -104,14 +103,14 @@ export default defineConfig({
   },
   esbuild: {
     loader: 'jsx',
-    include: /(src|App|main|stubs|mockFirebase).*\.jsx?$/,
+    include: /(src|App|main|stubs|mock).*\.jsx?$/,
     exclude: [],
   },
   optimizeDeps: {
     esbuildOptions: {
-      loader: {'.js': 'jsx'},
+      loader: { '.js': 'jsx' },
       resolveExtensions: ['.web.js', '.js', '.jsx', '.json', '.mjs'],
     },
   },
-  build: {outDir: path.join(here, 'dist'), emptyOutDir: true},
+  build: { outDir: path.join(here, 'dist'), emptyOutDir: true },
 });

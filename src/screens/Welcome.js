@@ -1,10 +1,11 @@
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react';
-import {View, Text, StyleSheet, SafeAreaView} from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import Logo from '../components/Logo';
 import Button from '../components/Button';
-import {colors, type} from '../theme';
+import { colors, type } from '../theme';
 
-export default function Welcome({navigation}) {
+export default function Welcome({ navigation }) {
   return (
     <SafeAreaView style={styles.root}>
       <View style={styles.hero}>
@@ -30,7 +31,7 @@ export default function Welcome({navigation}) {
 }
 
 const styles = StyleSheet.create({
-  root: {flex: 1, backgroundColor: colors.bg},
+  root: { flex: 1, backgroundColor: colors.bg },
   hero: {
     flex: 1,
     alignItems: 'center',
@@ -43,8 +44,8 @@ const styles = StyleSheet.create({
     color: colors.muted,
     lineHeight: 24,
   },
-  actions: {paddingBottom: 28, paddingHorizontal: 28},
-  second: {marginTop: 12},
+  actions: { paddingBottom: 28, paddingHorizontal: 28 },
+  second: { marginTop: 12 },
   link: {
     marginTop: 20,
     textAlign: 'center',

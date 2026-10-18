@@ -16,7 +16,7 @@ Create lists, add tasks with a start time, tick them off, and watch your progres
 
 A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up, create a list, add tasks, tick them off. Click it for the full 1080p video **with sound**
 ([`docs/demo/wha2do-demo.mp4`](docs/demo/wha2do-demo.mp4)); the GIF is silent. The soundtrack is an original jingle and sound effects synthesised in code
-([`preview/make-audio.py`](preview/make-audio.py)), so there is nothing to license. It is rendered from the browser preview, see below.
+([`preview/make-audio.py`](preview/make-audio.py)), so there is nothing to license. It is rendered from the browser preview, see below. (The video was recorded before the unused phone-number field was removed from sign-up, so it still shows that field; `npm run preview:video` re-records it.)
 
 ## Features
 
@@ -54,37 +54,38 @@ A one-minute walkthrough with a moving camera (3D tilt, zooms and pans): sign up
 
 | Area | Choice |
 | --- | --- |
-| App | React Native 0.62 (Android), React 16.9 |
-| Navigation | React Navigation 5 (stack), switched by auth state |
-| Backend | Firebase Auth + Realtime Database (`firebase` JS SDK 7) |
+| App | React Native 0.88 (Android, new architecture, Hermes), React 19, target SDK 36 |
+| Navigation | React Navigation 7 (native stack), switched by auth state |
+| Backend | Firebase Auth (persistent login) + Realtime Database (`firebase` JS SDK 12, modular API) |
 | Forms | Formik + Yup |
 | Icons | react-native-vector-icons (Material Community) |
 | Tests | Jest + react-test-renderer |
 
 ## Getting started (Android)
 
-You need Node, a JDK and the Android SDK, as described in the
-[React Native environment setup](https://reactnative.dev/docs/0.62/environment-setup).
+You need **Node 22.11+**, **JDK 17 or newer** and the Android SDK (platform 37, build-tools 37, NDK 27.1.12297006 and
+CMake 3.22.1; Android Studio installs these on first sync). See the
+[React Native environment setup](https://reactnative.dev/docs/set-up-your-environment).
 
 ```bash
-npm install --legacy-peer-deps
+npm install
 npm run android      # with an emulator running or a device attached
 npm start            # Metro bundler, if it is not already running
 ```
+
+To build installable files: `npm run build:apk` (signed APK for sideloading) or `npm run build:aab` (Play Store
+bundle, needs your upload key). **Publishing: see [docs/PUBLISHING.md](docs/PUBLISHING.md).**
 
 ### On a Mac
 
 - **Quickest:** use the [browser preview](#browser-preview). It needs only Node and a browser, no Android tooling.
 - **Android emulator:**
-  1. Install [Android Studio](https://developer.android.com/studio), then in the SDK Manager add an Android SDK platform and an emulator image. On Apple Silicon choose an **ARM64** image.
-  2. Install JDK 11 (for example `brew install --cask zulu@11`). The Gradle wrapper (5.5) in this project does not run on newer JDKs.
+  1. Install [Android Studio](https://developer.android.com/studio), then in the SDK Manager add the Android 16/17 SDK platforms, build-tools, NDK 27.1 and CMake, and an emulator image. On Apple Silicon choose an **ARM64** image.
+  2. Install JDK 17 or newer (Android Studio bundles one; or `brew install --cask zulu@17`).
   3. Add the SDK to your shell profile: `export ANDROID_HOME=$HOME/Library/Android/sdk` and add `$ANDROID_HOME/platform-tools` to `PATH`.
-  4. Create and start a virtual device in Android Studio's Device Manager, then run `npm install --legacy-peer-deps && npm run android`.
+  4. Create and start a virtual device in Android Studio's Device Manager, then run `npm install && npm run android`.
 - **Real phone:** enable USB debugging, plug it in, check `adb devices` lists it, then `npm run android`.
-- **iOS:** the `ios/` folder is the untouched 2020 template and has not been maintained, so expect to fix it before it builds.
-
-Because this is React Native 0.62 with the Android Gradle plugin 3.4, newer Mac setups (Apple Silicon, recent Xcode or JDK) can hit
-build errors. If so, upgrading React Native is the real fix, see [next steps](#known-limitations-and-next-steps).
+- **iOS:** the iOS project was removed in the upgrade (the old one was an unmaintained 2020 template). Generate a fresh one with `npx @react-native-community/cli init` if you need it.
 
 ### Firebase
 
@@ -97,7 +98,7 @@ writable by that user only.
 Data layout:
 
 ```text
-users/{uid}/profile              { username, email, phone }
+users/{uid}/profile              { username, email }
 users/{uid}/lists/{listId}       { name, createdAt }
 users/{uid}/tasks/{listId}/{id}  { name, time, done, createdAt }
 ```
@@ -129,35 +130,46 @@ npm run lint
 ```text
 App.js                  app root (navigation + toast host)
 src/
-  navigation.js         auth-driven stack navigator
+  navigation.js         auth-driven native-stack navigator
+  auth.js               React context holding the signed-in user
   api.js                all Firebase calls (auth, lists, tasks)
   firebase.js           Firebase initialisation
   theme.js              colours, radii, shadows, type
   toast.js              tiny toast event bus
   listStyle.js          picks a list icon and colour from its name
-  components/           Button, Input, Sheet, Fab, Header, Logo, ...
+  components/           Button, Input, Sheet, Fab, Header, Logo, AccountSheet, ...
   screens/              Welcome, Login, SignUp, Lists, Tasks, About
-preview/                browser preview and screenshot tooling
+preview/                browser preview, in-memory Firebase (preview/mock) and screenshot/video tooling
 __tests__/              Jest tests
-android/  ios/          native projects
+android/                native Android project (release signing, icons)
+store/                  Google Play graphics and listing text
+docs/                   publishing guide, privacy policy, demo media
+scripts/                icon generator
 ```
 
 ## What changed in the revival
 
 - **Fixed a startup crash.** `SignUp.js` assigned undeclared globals at module level, which throws in strict mode, and `src/config.js` imported a package that was never installed.
-- **Stopped storing passwords.** Sign-up used to save an MD5 hash of the password in the database. Firebase Auth already handles credentials, so the profile now holds only the username, email and phone number.
+- **Stopped storing passwords.** Sign-up used to save an MD5 hash of the password in the database. Firebase Auth already handles credentials, so the profile now holds only the username and email.
 - **Real persistence.** Lists and tasks were kept in component state with hard-coded samples and then lost. They are now stored per user in Firebase and streamed live.
 - **Auth-driven navigation.** The navigator shows the onboarding or app screens based on the sign-in state, instead of calling `navigate()` after every login and logout.
 - **New design.** A shared theme and component set replaces the nested-`View` layouts, with tap-to-complete tasks, a progress bar, bottom sheets and empty states.
+- **Modern stack for Play.** Upgraded from React Native 0.62 to 0.88 (target SDK 36, new architecture, Hermes, Gradle 9), Firebase to the modular v12 SDK with persistent sign-in, and navigation to native stacks (which also removed the gesture-handler setup the old Android code was missing).
 - **Clean-up.** Removed dead screens and unused packages (`md5`, `react-native-paper`, `react-native-swipeout`, Expo leftovers), duplicated Firebase config, debug logging, and stray root-level images.
 - **Tests and lint.** Jest was failing before it ran a single test, and ESLint reported over 2,000 problems. Both are now green.
 
+## Play Store readiness
+
+The app is set up for Google Play: React Native 0.88 with target SDK 36, a signed-bundle build (`npm run build:aab`),
+adaptive launcher icons, in-app account deletion, a draft privacy policy, listing text and store graphics. The full
+checklist, including the steps only you can do (your own Firebase project, upload key, Play Console account), is in
+[docs/PUBLISHING.md](docs/PUBLISHING.md).
+
 ## Known limitations and next steps
 
-- The native Android build was not run while reviving the project. The JavaScript side is tested, but please run `npm run android` once to confirm your toolchain.
-- The stack is from 2020 (React Native 0.62, Gradle plugin 3.4). Upgrading React Native, Firebase v9+ (modular SDK) and React Navigation 6 is the natural next step.
+- The app has not been run on a physical device or emulator yet. Do a pass on a real phone before publishing, paying attention to the keyboard behaviour in the bottom sheets (the app uses edge-to-edge layout).
 - The Firebase project in `src/firebase.js` may no longer exist or accept requests. Use your own project, and restrict its API key in the Google Cloud console.
-- iOS code is still in the repo from the template but has not been maintained.
+- The old iOS project was removed in the React Native upgrade; generate a fresh one if you want an iOS build.
 
 ## Team
 

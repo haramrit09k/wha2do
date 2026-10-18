@@ -6,12 +6,13 @@
     "dev": "vite --host",
     "build": "vite build",
     "shots": "node screenshots.mjs",
+    "store": "node store-assets.mjs",
     "video": "node demo-video.mjs"
   },
   "dependencies": {
-    "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "react-native-web": "0.13.18"
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native-web": "0.21.4"
   },
   "devDependencies": {
     "playwright": "1.56.1",

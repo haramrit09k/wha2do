@@ -1,9 +1,9 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {colors, type} from '../theme';
+import { View, Text, StyleSheet } from 'react-native';
+import { colors, type } from '../theme';
 import Icon from './Icon';
 
-export default function EmptyState({icon, title, hint}) {
+export default function EmptyState({ icon, title, hint }) {
   return (
     <View style={styles.wrap}>
       <View style={styles.badge}>
@@ -16,7 +16,7 @@ export default function EmptyState({icon, title, hint}) {
 }
 
 const styles = StyleSheet.create({
-  wrap: {alignItems: 'center', paddingVertical: 48, paddingHorizontal: 32},
+  wrap: { alignItems: 'center', paddingVertical: 48, paddingHorizontal: 32 },
   badge: {
     width: 80,
     height: 80,
@@ -25,6 +25,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {marginTop: 16},
-  hint: {marginTop: 6, textAlign: 'center'},
+  title: { marginTop: 16 },
+  hint: { marginTop: 6, textAlign: 'center' },
 });

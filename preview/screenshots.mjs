@@ -2,17 +2,17 @@
 // and saves phone-sized screenshots to ../docs/screenshots.
 import path from 'node:path';
 import fs from 'node:fs';
-import {fileURLToPath} from 'node:url';
-import {createServer} from 'vite';
-import {chromium} from 'playwright';
+import { fileURLToPath } from 'node:url';
+import { createServer } from 'vite';
+import { chromium } from 'playwright';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const out = path.resolve(here, '../docs/screenshots');
-fs.mkdirSync(out, {recursive: true});
+fs.mkdirSync(out, { recursive: true });
 
 const server = await createServer({
   root: here,
-  server: {port: 5199},
+  server: { port: 5199 },
   logLevel: 'error',
 });
 await server.listen();
@@ -20,17 +20,17 @@ const url = `http://localhost:${server.config.server.port}/`;
 
 const browser = await chromium.launch();
 const page = await browser.newPage({
-  viewport: {width: 390, height: 844},
+  viewport: { width: 390, height: 844 },
   deviceScaleFactor: 2,
 });
 page.on('pageerror', e => console.error('page error:', e.message));
 
 const shot = async name => {
   await page.waitForTimeout(500);
-  await page.screenshot({path: path.join(out, `${name}.png`)});
+  await page.screenshot({ path: path.join(out, `${name}.png`) });
   console.log('saved', name);
 };
-const text = t => page.getByText(t, {exact: true}).first();
+const text = t => page.getByText(t, { exact: true }).first();
 const field = p => page.getByPlaceholder(p);
 
 await page.goto(url);
@@ -41,11 +41,9 @@ await shot('01-welcome');
 await text('Create an account').click();
 await field('Username').fill('al');
 await field('Email address').fill('alex@');
-await field('Phone (10 digits)').fill('55512');
 await field('Password (8+ characters)').fill('short');
 await field('Username').click();
 await field('Email address').click();
-await field('Phone (10 digits)').click();
 await field('Password (8+ characters)').click();
 await field('Username').click();
 await shot('02-signup-validation');
@@ -56,10 +54,7 @@ await text('Log in').click();
 await field('Email address').fill('demo@wha2do.app');
 await field('Password').fill('password123');
 await shot('03-login');
-await page
-  .getByRole('button', {name: 'Log in'})
-  .last()
-  .click();
+await page.getByRole('button', { name: 'Log in' }).last().click();
 
 await text('Your lists').waitFor();
 await shot('04-lists');
@@ -87,7 +82,9 @@ const uri = n =>
     .readFileSync(path.join(out, `${n}.png`))
     .toString('base64')}`;
 const phones = ['01-welcome', '04-lists', '05-tasks', '06-add-task'];
-const banner = await browser.newPage({viewport: {width: 1600, height: 900}});
+const banner = await browser.newPage({
+  viewport: { width: 1600, height: 900 },
+});
 await banner.setContent(`<body style="margin:0;background:linear-gradient(135deg,#4154FE,#7B8CFF);font-family:-apple-system,Segoe UI,Roboto,sans-serif;display:flex;align-items:center;justify-content:center;gap:36px;height:900px">
   ${phones
     .map(
@@ -98,7 +95,7 @@ await banner.setContent(`<body style="margin:0;background:linear-gradient(135deg
     )
     .join('')}
 </body>`);
-await banner.screenshot({path: path.join(out, 'overview.png')});
+await banner.screenshot({ path: path.join(out, 'overview.png') });
 console.log('saved overview');
 
 await browser.close();
