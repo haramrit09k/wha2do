@@ -21,12 +21,26 @@ your own accounts or secrets, so they cannot be done from the repository.
 | Listing text | `store/listing.md` |
 | Privacy policy draft | `docs/privacy-policy.md` |
 
-## 2. Decide the package name (do this first)
+## 2. The 2020 listing, a new developer account, and the package name
 
-The package name (`applicationId`) is **permanent** once you upload your first build. It is currently
-`com.haramrit09k.wha2do`. To change it, edit `namespace` and `applicationId` in `android/app/build.gradle`
-and move `android/app/src/main/java/com/haramrit09k/wha2do/` to match (update the `package` line in both Kotlin
-files).
+wha2do was first published on Google Play in 2020 as `com.wha2do`. That developer account was **closed for
+inactivity in July 2022 and cannot be reactivated**, and the listing no longer resolves on Play. So this release
+is a **brand-new app on a new developer account**, not an update:
+
+- Create a new Play developer account at [play.google.com/console](https://play.google.com/console) (one-time
+  registration fee, identity verification). A *personal* account created recently may have to run a closed test
+  with a minimum number of testers for a minimum number of days before production access; an *organization*
+  account avoids that but needs a D-U-N-S number. Check the Console for the current rules. Also complete
+  Android developer verification if the Console asks for it.
+- The package name is **permanent** once you upload your first build, and it must be unique across Play. The app
+  uses `com.haramrit09k.wha2do`. Package names of deleted apps generally cannot be reused, so `com.wha2do` is
+  most likely unavailable; if you want to try it anyway, change it as described below and let the Console's
+  first upload tell you (it rejects a taken name), before you invest in anything else.
+- To change it, edit `namespace` and `applicationId` in `android/app/build.gradle`, move
+  `android/app/src/main/java/com/haramrit09k/wha2do/` to the matching folder, and update the `package` line in
+  both Kotlin files.
+- A new signing key is fine here (section 4), because nothing already installed needs to be updated. People who
+  still have the 2020 app installed will not receive this one as an update.
 
 ## 3. Use your own Firebase project (**you**)
 
